@@ -1,0 +1,12 @@
+{
+  "name": "respify",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "chrome-types": "^0.1.329"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "module"
+}

@@ -4,27 +4,22 @@
     "version": "1.0",
     "description": "A minimalist and effective tool to display TailwindCSS responsive breakpoints for easy reference during development.",
     "icons": {
-        "48": "48.png"
+        "48": "src/images/48.png"
     },
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "48.png"
+        "default_popup": "src/pages/popup.html",
+        "default_icon": "src/images/48.png"
     },
     "permissions": [
         "tabs",
+        "activeTab",
         "notifications"
     ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
     "background": {
-        "service_worker": "background.js"
-    },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "content.js"
-            ]
-        }
-    ]
+        "service_worker": "background.ts"
+    }
 }
