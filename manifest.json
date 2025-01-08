@@ -20,6 +20,16 @@
         "https://*/*"
     ],
     "background": {
-        "service_worker": "background.ts"
-    }
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "src/scripts/content.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
 }
