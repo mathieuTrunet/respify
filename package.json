@@ -1,12 +1,15 @@
 {
   "name": "respify",
+  "type": "module",
   "module": "index.ts",
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "@types/bun": "latest",
-    "chrome-types": "^0.1.329"
+    "chrome-types": "^0.1.329",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  },
-  "type": "module"
+  }
 }
