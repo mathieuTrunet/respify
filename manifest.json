@@ -7,20 +7,22 @@
         "48": "src/images/48.png"
     },
     "action": {
-        "default_popup": "src/pages/popup.html",
+        "default_popup": "src/pages/popup/popup.html",
         "default_icon": "src/images/48.png"
     },
     "permissions": [
         "tabs",
         "activeTab",
-        "notifications"
+        "storage",
+        "scripting"
     ],
     "host_permissions": [
         "http://*/*",
         "https://*/*"
     ],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "src/background.js",
+        "type": "module"
     },
     "content_scripts": [
         {

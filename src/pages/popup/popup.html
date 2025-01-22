@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../lib/tailwind.min.js"> </script>
+    <script src="./popup.js"></script>
+
+    <title>Respify</title>
+
+</head>
+
+<body>
+    <div class="w-80 rounded-lg border border-border bg-card shadow-lg">
+        <div class="p-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-card-foreground">Respify</h2>
+                <img src="../../images/settings.svg" />
+            </div>
+            <div class="mt-4 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <img id="toggle-icon" src="../../images/eye.svg" />
+                        <span class="text-sm font-medium">Manual toggle</span>
+                    </div>
+                    <label
+                        class="relative inline-block h-6 w-10 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-gray-900">
+                        <input id="toggle-checkbox" class="peer sr-only" type="checkbox" />
+                        <span
+                            class="absolute inset-y-0 start-0 m-1 size-4 rounded-full bg-gray-300 ring-[6px] ring-inset ring-white transition-all peer-checked:start-5 peer-checked:w-2 peer-checked:bg-white peer-checked:ring-transparent" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

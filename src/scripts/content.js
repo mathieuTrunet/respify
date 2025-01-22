@@ -37,7 +37,7 @@ const getBreakpointValue = () => {
 }
 
 const generateElement = element => {
-  element.className = 'respify'
+  element.id = 'respify-tooltip'
   element.style.zIndex = 9999
   element.style.position = 'fixed'
 
@@ -74,3 +74,11 @@ if (hasTailwind) {
 
   generateElement(element)
 }
+
+chrome.runtime.onMessage.addListener(request => {
+  if (request.event === 'toggleChanged') {
+    const tooltip = document.getElementById('respify-tooltip')
+
+    request.toggled ? (tooltip.style.display = 'none') : (tooltip.style.display = 'inline-flex')
+  }
+})
