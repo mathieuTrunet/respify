@@ -21,7 +21,7 @@ const checkTailwind = () => {
 }
 
 const getBreakpointValue = () => {
-  screenWidth = window.screen.width
+  const screenWidth = window.screen.width
 
   if (screenWidth >= 1536) return '2xl'
 
@@ -36,43 +36,43 @@ const getBreakpointValue = () => {
   return 'xs'
 }
 
-const generateElement = element => {
-  element.id = 'respify-tooltip'
-  element.style.zIndex = 9999
-  element.style.position = 'fixed'
+const generateTooltip = () => {
+  const tooltip = document.createElement('div')
 
-  element.textContent = `breakpoint: ${getBreakpointValue()}`
-  element.style.bottom = '0'
-  element.style.right = '0'
+  tooltip.id = 'respify-tooltip'
+  tooltip.style.zIndex = 9999
+  tooltip.style.position = 'fixed'
 
-  element.style.display = 'inline-flex'
-  element.style.paddingTop = '0.125rem'
-  element.style.paddingBottom = '0.125rem'
-  element.style.paddingLeft = '0.625rem'
-  element.style.paddingRight = '0.625rem'
-  element.style.margin = '0.5rem'
-  element.style.alignItems = 'center'
-  element.style.backgroundImage =
-    'linear-gradient(to left top, rgb(254, 249, 195), rgb(253, 224, 71), rgb(234, 179, 8))'
-  element.style.borderRadius = '9999px'
-  element.style.borderWidth = '1px'
-  element.style.fontSize = '1.25rem'
-  element.style.lineHeight = '1rem'
-  element.style.fontWeight = 600
-  element.style.borderColor = 'black'
-  element.style.color = 'black'
+  tooltip.textContent = `breakpoint: ${getBreakpointValue()}`
+  tooltip.style.bottom = '0'
+  tooltip.style.right = '0'
 
-  document.body.appendChild(element)
+  tooltip.style.display = 'inline-flex'
+  tooltip.style.paddingTop = '0.125rem'
+  tooltip.style.paddingBottom = '0.125rem'
+  tooltip.style.paddingLeft = '0.625rem'
+  tooltip.style.paddingRight = '0.625rem'
+  tooltip.style.alignItems = 'center'
+  tooltip.style.backgroundColor = '#7579e7'
+  tooltip.style.borderTopLeftRadius = '0.25rem'
+  tooltip.style.borderStroke = '0px'
+  tooltip.style.fontSize = '1.25rem'
+  tooltip.style.lineHeight = '1rem'
+  tooltip.style.fontWeight = 600
+  tooltip.style.color = 'black'
+  tooltip.style.userSelect = 'none'
 
-  setInterval(() => (element.textContent = `breakpoint: ${getBreakpointValue()}`), 50)
+  setInterval(() => (tooltip.textContent = `breakpoint: ${getBreakpointValue()}`), 50)
+
+  return tooltip
 }
 
 const hasTailwind = checkTailwind()
 
 if (hasTailwind) {
-  const element = document.createElement('div')
+  const tooltip = generateTooltip()
 
-  generateElement(element)
+  document.body.appendChild(tooltip)
 }
 
 chrome.runtime.onMessage.addListener(request => {
