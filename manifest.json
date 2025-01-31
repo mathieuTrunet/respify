@@ -3,12 +3,8 @@
     "name": "Respify | A TailwindCSS responsive tooltip",
     "version": "1.0",
     "description": "A minimalist and effective tool to display TailwindCSS responsive breakpoints for easy reference during development.",
-    "icons": {
-        "48": "src/images/48.png"
-    },
     "action": {
-        "default_popup": "src/pages/popup/popup.html",
-        "default_icon": "src/images/48.png"
+        "default_popup": "src/pages/popup/popup.html"
     },
     "permissions": [
         "tabs",
