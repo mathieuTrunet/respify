@@ -17,13 +17,13 @@
         "https://*/*"
     ],
     "background": {
-        "service_worker": "src/background.js",
+        "service_worker": "src/main.js",
         "type": "module"
     },
     "content_scripts": [
         {
             "js": [
-                "src/scripts/content.js"
+                "src/scripts/contents/tooltip.js"
             ],
             "matches": [
                 "<all_urls>"
