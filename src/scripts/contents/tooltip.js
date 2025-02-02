@@ -70,15 +70,23 @@ const generateTooltip = () => {
 const hasTailwind = checkTailwind()
 
 if (hasTailwind) {
-  const tooltip = generateTooltip()
+  document.body.appendChild(generateTooltip())
 
-  document.body.appendChild(tooltip)
+  chrome.storage.local.get(
+    'toggled',
+    ({ toggled }) => !toggled && (document.getElementById('respify-tooltip').style.display = 'none')
+  )
+
+  chrome.runtime.onMessage.addListener(request => {
+    if (request.event === 'toggleChanged')
+      document.getElementById('respify-tooltip').style.display = request.toggled ? 'inline-flex' : 'none'
+  })
+
+  chrome.tabs.onActivated.addListener(() =>
+    chrome.storage.local.get('toggled', ({ toggled }) => {
+      const tooltip = document.getElementById('respify-tooltip')
+
+      if (!toggled) tooltip.style.display = 'none'
+    })
+  )
 }
-
-chrome.runtime.onMessage.addListener(request => {
-  if (request.event === 'toggleChanged') {
-    const tooltip = document.getElementById('respify-tooltip')
-
-    request.toggled ? (tooltip.style.display = 'none') : (tooltip.style.display = 'inline-flex')
-  }
-})
