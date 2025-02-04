@@ -31,30 +31,23 @@ const initializeExtensionEnable = () => {
   })
 }
 
-const initalizeTailwindOnlyCheckbox = () => {
-  const checkbox = document.getElementById('tailwind-only-checkbox')
+const getCheckboxInitalizer = (checkboxId, storageKey, eventMEssageKey) => () => {
+  const checkbox = document.getElementById(checkboxId)
 
-  chrome.storage.local.get('tailwindOnly', data => (checkbox.checked = data.tailwindOnly))
-
-  checkbox.addEventListener('change', () => {
-    const checkBoxIsChecked = checkbox.checked
-
-    chrome.storage.local.set({ tailwindOnly: checkBoxIsChecked })
-
-    sendMessageToContentScript({ event: 'tailwindOnlyChanged', value: checkBoxIsChecked })
-  })
-}
-
-const initializeDevOnlyCheckbox = () => {
-  const checkbox = document.getElementById('dev-only-checkbox')
-
-  chrome.storage.local.get('devOnly', data => (checkbox.checked = data.devOnly))
+  chrome.storage.local.get(storageKey, ({ [storageKey]: storageValue }) => (checkbox.checked = storageValue))
 
   checkbox.addEventListener('change', () => {
     const checkBoxIsChecked = checkbox.checked
 
-    chrome.storage.local.set({ devOnly: checkBoxIsChecked })
+    chrome.storage.local.set({ [storageKey]: checkBoxIsChecked })
 
-    sendMessageToContentScript({ event: 'devOnlyChanged', value: checkBoxIsChecked })
+    sendMessageToContentScript({ event: eventMEssageKey, value: checkBoxIsChecked })
   })
 }
+
+const initalizeTailwindOnlyCheckbox = getCheckboxInitalizer(
+  'tailwind-only-checkbox',
+  'tailwindOnly',
+  'tailwindOnlyChanged'
+)
+const initializeDevOnlyCheckbox = getCheckboxInitalizer('dev-only-checkbox', 'devOnly', 'devOnlyChanged')
