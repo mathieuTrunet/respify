@@ -13,9 +13,30 @@
 <body>
     <div class=" w-80">
         <div class="flex space-x-2">
-            <span>Manual toggle</span>
-            <input id="toggle-checkbox" type="checkbox" />
+            <span>Enable</span>
+            <input id="extension-enable-checkbox" type="checkbox" />
         </div>
+        <div id="extension-enabled-div" class="flex-row">
+            <div>
+                <span>Whitelist</span>
+                <input id="whitelist-enabled-checkbox" type="checkbox" />
+                <span id="whitelist-span">Manage whitelisted sites</span>
+            </div>
+            <div>
+                <span>Blacklist</span>
+                <input id="blacklist-enabled-checkbox" type="checkbox" />
+                <span id="blacklist-span">Manage blacklisted sites</span>
+            </div>
+            <div>
+                <span>Tailwind only</span>
+                <input id="tailwind-only-checkbox" type="checkbox" />
+            </div>
+            <div>
+                <span>Development only</span>
+                <input id="dev-only-checkbox" type="checkbox" />
+            </div>
+        </div>
+
     </div>
 </body>
 
