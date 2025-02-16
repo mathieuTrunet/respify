@@ -3,12 +3,15 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 
   chrome.storage.local.set({
     extensionEnabled: true,
-    whiteListEnabled: false,
-    whiteList: [],
-    blackListEnabled: false,
-    blackList: [],
+    whitelistEnabled: false,
+    whitelist: [],
+    blacklistEnabled: false,
+    blacklist: [],
     tailwindOnly: true,
     devOnly: false,
-    devSitesList: [],
+    devSitesList: [
+      { key: 'localhost:*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
+      { key: '127.*.*.*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
+    ],
   })
 })

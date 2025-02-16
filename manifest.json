@@ -23,7 +23,8 @@
     "content_scripts": [
         {
             "js": [
-                "src/scripts/contents/tooltip.js"
+                "src/scripts/contents/tooltip.js",
+                "src/scripts/contents/event.js"
             ],
             "matches": [
                 "<all_urls>"

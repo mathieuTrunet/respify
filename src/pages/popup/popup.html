@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../../../lib/tailwind.min.js"> </script>
-    <script src="./popup.js"></script>
+    <script src="./main.js"></script>
+    <script src="./list.js"></script>
 
     <title>Respify</title>
 </head>
 
 <body>
-    <div class=" w-80">
+    <div id="main-div" class=" w-80">
         <div class="flex space-x-2">
             <span>Enable</span>
             <input id="extension-enable-checkbox" type="checkbox" />
@@ -19,13 +20,14 @@
         <div id="extension-enabled-div" class="flex-row">
             <div>
                 <span>Whitelist</span>
-                <input id="whitelist-enabled-checkbox" type="checkbox" />
-                <span id="whitelist-span">Manage whitelisted sites</span>
+                <input id="whitelist-checkbox" type="checkbox" />
+                <a href="#" id="manage-whitelist">Manage whitelisted sites</a>
             </div>
             <div>
                 <span>Blacklist</span>
-                <input id="blacklist-enabled-checkbox" type="checkbox" />
-                <span id="blacklist-span">Manage blacklisted sites</span>
+                <input id="blacklist-checkbox" type="checkbox" />
+                <a href="#" id="manage-blacklist">Manage blacklisted sites</a>
+
             </div>
             <div>
                 <span>Tailwind only</span>
@@ -34,9 +36,18 @@
             <div>
                 <span>Development only</span>
                 <input id="dev-only-checkbox" type="checkbox" />
+                <a href="#" id="manage-dev-url-list">Manage development urls</a>
             </div>
         </div>
-
+    </div>
+    <div id="list-div" class="hidden">
+        <a href="#" id="close-list">Close</a>
+        <p>Whitelist</p>
+        <div id="whitelist-div"></div>
+        <p>Blacklist</p>
+        <div id="blacklist-div"></div>
+        <p>Development urls</p>
+        <div id="dev-url-div"></div>
     </div>
 </body>
 
