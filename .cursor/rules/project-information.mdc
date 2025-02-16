@@ -1,0 +1,9 @@
+---
+description: should be used for context. This project is a chrome web extension that display a tooltip on chrome navigator, the tooltip informs of the current responsive breakpoint relative to tailwindCss (sm, md...).
+globs: 
+---
+
+# Your rule content
+
+- The project is using vanilla js, the only modules in [package.json](mdc:package.json) are only used for lint of Qol. Only tailwind is used as a min.js script for the [popup.html](mdc:src/pages/popup/popup.html) file.
+- The extension manifest can be found in [manifest.json](mdc:manifest.json), it contains where where the scripts are trigerred
