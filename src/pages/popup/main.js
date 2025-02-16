@@ -5,10 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTailwindOnlyCheckboxEvent()
   setWhitelistCheckboxEvent()
   setBlacklistCheckboxEvent()
-
-  setWhitelistLink()
-  setBlacklistLink()
-  setDevUrlListLink()
 })
 
 const sendEvent = ({ event, value }) =>
@@ -68,17 +64,3 @@ const setBlacklistCheckboxEvent = getCheckboxEventSetter(
   'blacklistEnabled',
   'blacklistChanged'
 )
-
-const getListLinkSetter = listHrefId => () => {
-  document.getElementById(listHrefId).addEventListener('click', () => {
-    const list = document.getElementById('list-div')
-    const main = document.getElementById('main-div')
-
-    list.style.display = 'block'
-    main.style.display = 'none'
-  })
-}
-
-const setWhitelistLink = getListLinkSetter('manage-whitelist')
-const setBlacklistLink = getListLinkSetter('manage-blacklist')
-const setDevUrlListLink = getListLinkSetter('manage-dev-url-list')

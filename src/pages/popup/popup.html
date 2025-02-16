@@ -7,6 +7,8 @@
     <script src="../../../lib/tailwind.min.js"> </script>
     <script src="./main.js"></script>
     <script src="./list.js"></script>
+    <script src="./tooltipSettings.js"></script>
+    <script src="./router.js"></script>
 
     <title>Respify</title>
 </head>
@@ -39,6 +41,7 @@
                 <a href="#" id="manage-dev-url-list">Manage development urls</a>
             </div>
         </div>
+        <a href="#" id="manage-tooltip-settings">Settings</a>
     </div>
     <div id="list-div" class="hidden">
         <a href="#" id="close-list">Close</a>
@@ -48,6 +51,10 @@
         <div id="blacklist-div"></div>
         <p>Development urls</p>
         <div id="dev-url-div"></div>
+    </div>
+    <div id="tooltip-settings-div" class="hidden">
+        <a href="#" id="close-tooltip-settings">Close</a>
+        <p>Respify is enabled</p>
     </div>
 </body>
 

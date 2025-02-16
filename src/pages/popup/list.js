@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  setMainPageLink()
-
   loadWhitelistContent()
   loadBlacklistContent()
   loadDevSitesListContent()
@@ -10,16 +8,6 @@ const sendListChangedEvent = () =>
   chrome.tabs.query({ active: true, currentWindow: true }, ([currentTab]) =>
     chrome.tabs.sendMessage(currentTab.id, { event: 'listChanged' })
   )
-
-const setMainPageLink = () => {
-  document.getElementById('close-list').addEventListener('click', () => {
-    const list = document.getElementById('list-div')
-    const main = document.getElementById('main-div')
-
-    main.style.display = 'block'
-    list.style.display = 'none'
-  })
-}
 
 const getListContentLoader = (listDivId, storageKey) => async () => {
   const { [storageKey]: storageList } = await chrome.storage.local.get(storageKey)
