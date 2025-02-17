@@ -75,6 +75,9 @@ const createInputRowElement = storageKey => {
   const nameInput = document.createElement('input')
   const ruleInput = document.createElement('input')
 
+  nameInput.placeholder = 'Name'
+  ruleInput.placeholder = 'Rule'
+
   const createButton = document.createElement('div')
   createButton.textContent = '➕'
   createButton.addEventListener('click', async () => {
