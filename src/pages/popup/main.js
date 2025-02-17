@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setTailwindOnlyCheckboxEvent()
   setWhitelistCheckboxEvent()
   setBlacklistCheckboxEvent()
+
+  setResetTooltipPositionEvent()
 })
 
 const sendEvent = ({ event, value }) =>
@@ -64,3 +66,9 @@ const setBlacklistCheckboxEvent = getCheckboxEventSetter(
   'blacklistEnabled',
   'blacklistChanged'
 )
+
+const setResetTooltipPositionEvent = () => {
+  const resetTooltipPosition = document.getElementById('reset-tooltip-position')
+
+  resetTooltipPosition.addEventListener('click', () => sendEvent({ event: 'resetTooltipPosition' }))
+}

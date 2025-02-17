@@ -1,3 +1,14 @@
+let translateX = 0
+let translateY = 0
+
+chrome.runtime.onMessage.addListener(({ event }) => {
+  if (event !== 'resetTooltipPosition') return
+
+  tooltipElement.style.transform = 'translate(0px, 0px)'
+  translateX = 0
+  translateY = 0
+})
+
 const getBreakpointValue = async () => {
   const { breakpoints } = await chrome.storage.local.get('breakpoints')
   const screenWidth = window.screen.width
@@ -35,8 +46,6 @@ const createTooltipElement = () => {
   tooltip.style.userSelect = 'none'
 
   let isDragging = false
-  let translateX = 0
-  let translateY = 0
   let startX
   let startY
 
@@ -48,20 +57,18 @@ const createTooltipElement = () => {
   })
 
   document.addEventListener('mousemove', element => {
-    if (isDragging) {
-      element.preventDefault()
-      translateX = element.clientX - startX
-      translateY = element.clientY - startY
-      tooltip.style.transform = `translate(${translateX}px, ${translateY}px)`
-    }
+    if (isDragging === false) return
+
+    element.preventDefault()
+    translateX = element.clientX - startX
+    translateY = element.clientY - startY
+    tooltip.style.transform = `translate(${translateX}px, ${translateY}px)`
   })
 
   document.addEventListener('mouseup', () => {
     isDragging = false
 
-    setTimeout(() => {
-      tooltip.style.transition = 'none'
-    }, 500)
+    setTimeout(() => (tooltip.style.transition = 'none'), 500)
   })
 
   const resizeObserver = new ResizeObserver(
