@@ -14,6 +14,7 @@ const createTooltipElement = () => {
   tooltip.id = 'respify-tooltip'
   tooltip.style.zIndex = 9999
   tooltip.style.position = 'fixed'
+  tooltip.style.cursor = 'move'
 
   tooltip.style.bottom = '0'
   tooltip.style.right = '0'
@@ -32,6 +33,36 @@ const createTooltipElement = () => {
   tooltip.style.fontWeight = 600
   tooltip.style.color = 'black'
   tooltip.style.userSelect = 'none'
+
+  let isDragging = false
+  let translateX = 0
+  let translateY = 0
+  let startX
+  let startY
+
+  tooltip.addEventListener('mousedown', element => {
+    tooltip.style.transition = 'none'
+    isDragging = true
+    startX = element.clientX - translateX
+    startY = element.clientY - translateY
+  })
+
+  document.addEventListener('mousemove', element => {
+    if (isDragging) {
+      element.preventDefault()
+      translateX = element.clientX - startX
+      translateY = element.clientY - startY
+      tooltip.style.transform = `translate(${translateX}px, ${translateY}px)`
+    }
+  })
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false
+
+    setTimeout(() => {
+      tooltip.style.transition = 'none'
+    }, 500)
+  })
 
   const resizeObserver = new ResizeObserver(
     async () => (tooltip.textContent = `breakpoint: ${await getBreakpointValue()}`)
