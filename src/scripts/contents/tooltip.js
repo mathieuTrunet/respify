@@ -1,11 +1,11 @@
-const getBreakpointValue = () => {
+const getBreakpointValue = async () => {
+  const { breakpoints } = await chrome.storage.local.get('breakpoints')
   const screenWidth = window.screen.width
-  if (screenWidth >= 1536) return '2xl'
-  if (screenWidth >= 1280) return 'xl'
-  if (screenWidth >= 1024) return 'lg'
-  if (screenWidth >= 768) return 'md'
-  if (screenWidth >= 640) return 'sm'
-  return 'xs'
+
+  const sortedBreakpoints = [...breakpoints].sort((a, b) => a.value - b.value).reverse()
+  const breakpoint = sortedBreakpoints.find(breakpoint => screenWidth >= breakpoint.value)
+
+  return breakpoint?.key || 'xs'
 }
 
 const createTooltipElement = () => {
@@ -15,7 +15,6 @@ const createTooltipElement = () => {
   tooltip.style.zIndex = 9999
   tooltip.style.position = 'fixed'
 
-  tooltip.textContent = `breakpoint: ${getBreakpointValue()}`
   tooltip.style.bottom = '0'
   tooltip.style.right = '0'
 
@@ -34,7 +33,11 @@ const createTooltipElement = () => {
   tooltip.style.color = 'black'
   tooltip.style.userSelect = 'none'
 
-  setInterval(() => (tooltip.textContent = `breakpoint: ${getBreakpointValue()}`), 50)
+  const resizeObserver = new ResizeObserver(
+    async () => (tooltip.textContent = `breakpoint: ${await getBreakpointValue()}`)
+  )
+
+  resizeObserver.observe(document.documentElement)
 
   return tooltip
 }
@@ -42,3 +45,5 @@ const createTooltipElement = () => {
 const tooltipElement = createTooltipElement()
 
 document.body.appendChild(tooltipElement)
+
+getBreakpointValue().then(breakpoint => (tooltipElement.textContent = `breakpoint: ${breakpoint}`))

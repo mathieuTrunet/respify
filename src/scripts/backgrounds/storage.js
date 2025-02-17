@@ -13,5 +13,12 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       { key: 'localhost:*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
       { key: '127.*.*.*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
     ],
+    breakpointsList: [
+      { key: 'sm', value: 640 },
+      { key: 'md', value: 768 },
+      { key: 'lg', value: 1024 },
+      { key: 'xl', value: 1280 },
+      { key: '2xl', value: 1536 },
+    ],
   })
 })
