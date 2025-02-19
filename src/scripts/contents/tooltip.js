@@ -4,7 +4,8 @@ let translateY = 0
 chrome.runtime.onMessage.addListener(({ event }) => {
   if (event !== 'resetTooltipPosition') return
 
-  tooltipElement.style.transform = 'translate(0px, 0px)'
+  const zoom = window.devicePixelRatio
+  tooltipElement.style.transform = `translate(0px, 0px) scale(${1 / zoom})`
   translateX = 0
   translateY = 0
 })
@@ -56,13 +57,22 @@ const createTooltipElement = () => {
     startY = element.clientY - translateY
   })
 
+  const updateZoomCompensation = () => {
+    const zoom = window.devicePixelRatio
+    tooltip.style.transform = `translate(${translateX}px, ${translateY}px) scale(${1 / zoom})`
+  }
+
+  window.matchMedia('(resolution)').addListener(updateZoomCompensation)
+  updateZoomCompensation()
+
   document.addEventListener('mousemove', element => {
     if (isDragging === false) return
 
     element.preventDefault()
     translateX = element.clientX - startX
     translateY = element.clientY - startY
-    tooltip.style.transform = `translate(${translateX}px, ${translateY}px)`
+    const zoom = window.devicePixelRatio
+    tooltip.style.transform = `translate(${translateX}px, ${translateY}px) scale(${1 / zoom})`
   })
 
   document.addEventListener('mouseup', () => {
