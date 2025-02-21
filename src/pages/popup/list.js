@@ -15,19 +15,21 @@ const sendListChangedEvent = () =>
     chrome.tabs.sendMessage(currentTab.id, { event: 'listChanged' })
   )
 
-const getListContentLoader = (listDivId, storageKey) => async () => {
-  const { [storageKey]: storageList } = await chrome.storage.local.get(storageKey)
+const getListContentLoader =
+  ({ listDivId, storageKey }) =>
+  async () => {
+    const { [storageKey]: storageList } = await chrome.storage.local.get(storageKey)
 
-  for (const entry of storageList.entries()) {
-    const row = createRowElement(storageKey, entry)
+    for (const entry of storageList.entries()) {
+      const row = createRowElement(storageKey, entry)
 
-    document.getElementById(listDivId).appendChild(row)
+      document.getElementById(listDivId).appendChild(row)
+    }
+
+    const inputRowElement = createInputRowElement(storageKey)
+
+    document.getElementById(listDivId).appendChild(inputRowElement)
   }
-
-  const inputRowElement = createInputRowElement(storageKey)
-
-  document.getElementById(listDivId).appendChild(inputRowElement)
-}
 
 const createRowElement = (storageKey, entry) => {
   const [index, { key: name, value: rule }] = entry
@@ -84,7 +86,7 @@ const createDeleteButtonElement = (storageKey, index) => {
 
     listDiv.innerHTML = ''
 
-    getListContentLoader(listDivId, storageKey)()
+    getListContentLoader({ listDivId, storageKey })()
   })
 
   return deleteButton
@@ -130,7 +132,7 @@ const createInputRowElement = storageKey => {
 
     listDiv.innerHTML = ''
 
-    getListContentLoader(listDivId, storageKey)()
+    getListContentLoader({ listDivId, storageKey })()
   })
 
   inputWrapper.appendChild(nameInput)
@@ -141,9 +143,9 @@ const createInputRowElement = storageKey => {
   return inputRowElement
 }
 
-const loadWhitelistContent = getListContentLoader('whitelist-div', 'whitelist')
-const loadBlacklistContent = getListContentLoader('blacklist-div', 'blacklist')
-const loadDevSitesListContent = getListContentLoader('dev-url-div', 'devSitesList')
+const loadWhitelistContent = getListContentLoader({ listDivId: 'whitelist-div', storageKey: 'whitelist' })
+const loadBlacklistContent = getListContentLoader({ listDivId: 'blacklist-div', storageKey: 'blacklist' })
+const loadDevSitesListContent = getListContentLoader({ listDivId: 'dev-url-div', storageKey: 'devSitesList' })
 
 const addDefaultDevSitesListContent = () => {
   document.getElementById('add-default-dev-url').addEventListener('click', async () => {
