@@ -26,10 +26,12 @@ const setDevUrlListLink = getListLinkSetter('manage-dev-url-list')
 const setTooltipSettingsLink = () => {
   const tooltipSettingsDiv = document.getElementById('tooltip-settings-div')
   const mainDiv = document.getElementById('main-div')
+  const listDiv = document.getElementById('list-div')
 
   document.getElementById('manage-tooltip-settings').addEventListener('click', () => {
     tooltipSettingsDiv.style.display = 'block'
     mainDiv.style.display = 'none'
+    listDiv.style.display = 'none'
   })
 }
 

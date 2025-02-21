@@ -9,58 +9,169 @@
     <script src="./list.js"></script>
     <script src="./tooltipSettings.js"></script>
     <script src="./router.js"></script>
+    <link href="../../assets/NotoSansKR-Regular.ttf" rel="stylesheet">
+
 
     <title>Respify</title>
 </head>
 
-<body>
-    <div id="main-div" class=" w-80">
-        <div class="flex space-x-2">
-            <span>Enable</span>
-            <input id="extension-enable-checkbox" type="checkbox" />
+<body class="bg-gray-50">
+    <div class="w-80 shadow-md bg-white">
+        <div class="bg-[#1DAAAA] w-full p-4 text-white font-semibold flex justify-between items-center text-lg">
+            <span>Respify</span>
+            <button id="manage-tooltip-settings" class="hover:opacity-80">
+                <img src="../../assets/settings.svg" alt="Settings" class="w-6 h-6">
+            </button>
         </div>
-        <div id="extension-enabled-div" class="flex-row">
-            <div>
-                <a href="#" id="reset-tooltip-position">Reset tooltip position</a>
-            </div>
-            <div>
-                <span>Whitelist</span>
-                <input id="whitelist-checkbox" type="checkbox" />
-                <a href="#" id="manage-whitelist">Manage whitelisted sites</a>
-            </div>
-            <div>
-                <span>Blacklist</span>
-                <input id="blacklist-checkbox" type="checkbox" />
-                <a href="#" id="manage-blacklist">Manage blacklisted sites</a>
+    </div>
+
+    <div id="main-div" class="w-80 p-4 space-y-4">
+        <div class="flex items-center justify-between p-2 bg-white rounded shadow">
+            <span class="font-medium">Enable</span>
+            <input id="extension-enable-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
+        </div>
+
+        <div id="extension-enabled-div" class="space-y-3">
+            <button id="reset-tooltip-position" class="text-[#1DAAAA] hover:underline">
+                Reset tooltip position
+            </button>
+
+            <div class="space-y-3 bg-white p-3 rounded shadow">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <img src="../../assets/list-checks.svg" alt="Whitelist" class="w-4 h-4">
+                        <span class="font-medium">Whitelist</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input id="whitelist-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
+                        <button id="manage-whitelist" class="text-[#1DAAAA] hover:underline">
+                            Manage sites
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <img src="../../assets/list-x.svg" alt="Blacklist" class="w-4 h-4">
+                        <span class="font-medium">Blacklist</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input id="blacklist-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
+                        <button id="manage-blacklist" class="text-[#1DAAAA] hover:underline">
+                            Manage sites
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <img src="../../assets/globe-lock.svg" alt="Development" class="w-4 h-4">
+                        <span class="font-medium">Development only</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <input id="dev-only-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
+                        <button id="manage-dev-url-list" class="text-[#1DAAAA] hover:underline">
+                            Manage URLs
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <img src="../../assets/tailwind.svg" alt="Tailwind" class="w-4 h-4">
+                        <span class="font-medium">Tailwind only</span>
+                    </div>
+                    <input id="tailwind-only-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
+                </div>
+
 
             </div>
+        </div>
+    </div>
+
+    <div id="list-div" class="hidden w-80 p-4 space-y-4">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-lg">Manage Lists</h2>
+            <button id="close-list" class="text-gray-600 hover:text-gray-800">
+                <img src="../../assets/corner-down-left.svg" alt="Close" class="w-5 h-5">
+            </button>
+        </div>
+
+        <div class="space-y-4">
             <div>
-                <span>Tailwind only</span>
-                <input id="tailwind-only-checkbox" type="checkbox" />
+                <div class="flex items-center gap-1.5 mb-2">
+                    <img src="../../assets/list-checks.svg" alt="Whitelist" class="w-4 h-4">
+                    <span class="font-medium">Whitelist</span>
+                </div>
+                <div class="bg-white rounded shadow">
+                    <div class="h-1 bg-[#1DAAAA] rounded-t"></div>
+                    <div class="p-3" id="whitelist-div"></div>
+                </div>
             </div>
+
             <div>
-                <span>Development only</span>
-                <input id="dev-only-checkbox" type="checkbox" />
-                <a href="#" id="manage-dev-url-list">Manage development urls</a>
+                <div class="flex items-center gap-1.5 mb-2">
+                    <img src="../../assets/list-x.svg" alt="Blacklist" class="w-4 h-4">
+                    <span class="font-medium">Blacklist</span>
+                </div>
+                <div class="bg-white rounded shadow">
+                    <div class="h-1 bg-[#EB5353] rounded-t"></div>
+                    <div class="p-3" id="blacklist-div"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-1.5 mb-2">
+                    <img src="../../assets/globe-lock.svg" alt="Development" class="w-4 h-4">
+                    <span class="font-medium">Development URLs</span>
+                </div>
+                <div class="bg-white rounded shadow">
+                    <div class="h-1 bg-[#F3A634] rounded-t"></div>
+                    <div class="p-3" id="dev-url-div"></div>
+                </div>
             </div>
         </div>
-        <a href="#" id="manage-tooltip-settings">Settings</a>
     </div>
-    <div id="list-div" class="hidden">
-        <a href="#" id="close-list">Close</a>
-        <p>Whitelist</p>
-        <div id="whitelist-div"></div>
-        <p>Blacklist</p>
-        <div id="blacklist-div"></div>
-        <p>Development urls</p>
-        <div id="dev-url-div"></div>
-    </div>
-    <div id="tooltip-settings-div" class="hidden">
-        <a href="#" id="close-tooltip-settings">Close</a>
-        <p>Breakpoints</p>
-        <a href="#" id="restore-default-breakpoints">Restore default breakpoints</a>
-        <div id="breakpoints-div"></div>
+
+    <div id="tooltip-settings-div" class="hidden w-80 p-4 space-y-4">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-lg">Settings</h2>
+            <button id="close-tooltip-settings" class="text-gray-600 hover:text-gray-800">
+                <img src="../../assets/corner-down-left.svg" alt="Close" class="w-5 h-5">
+            </button>
+        </div>
+
+        <div>
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-1.5">
+                    <img src="../../assets/proportions.svg" alt="Breakpoints" class="w-4 h-4">
+                    <span class="font-medium">Breakpoints</span>
+                </div>
+                <button id="restore-default-breakpoints" class="text-[#1DAAAA] hover:underline">
+                    Restore defaults
+                </button>
+            </div>
+            <div id="breakpoints-div" class="bg-white p-3 rounded shadow"></div>
+        </div>
     </div>
 </body>
+
+<style>
+    body {
+        font-family: 'NotoSansKR', sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #a1a1aa;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #71717a;
+    }
+</style>
 
 </html>

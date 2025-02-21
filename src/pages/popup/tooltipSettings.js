@@ -20,16 +20,28 @@ const loadBreakpointsList = async () => {
   for (const [index, { key: breakpointKey, value: breakpointValue }] of breakpointsList.entries()) {
     const rowElement = document.createElement('div')
     rowElement.id = index
-    rowElement.className = 'flex space-x-2 border-b border-gray-200'
+    rowElement.className = 'flex items-center justify-between py-2 border-b border-gray-200'
 
-    const nameText = document.createElement('div')
+    const contentWrapper = document.createElement('div')
+    contentWrapper.className = 'flex items-center gap-8 flex-1'
+
+    const nameText = document.createElement('span')
     nameText.textContent = breakpointKey
+    nameText.className = 'font-medium w-16'
 
-    const ruleText = document.createElement('div')
+    const ruleText = document.createElement('span')
     ruleText.textContent = breakpointValue
+    ruleText.className = 'text-gray-600 w-16 text-right'
 
-    const deleteButton = document.createElement('div')
-    deleteButton.textContent = '❌'
+    const deleteButton = document.createElement('button')
+    deleteButton.className = 'hover:opacity-80 ml-4'
+
+    const deleteIcon = document.createElement('img')
+    deleteIcon.src = '../../assets/x.svg'
+    deleteIcon.alt = 'Delete'
+    deleteIcon.className = 'w-4 h-4'
+
+    deleteButton.appendChild(deleteIcon)
 
     deleteButton.addEventListener('click', async () => {
       const { breakpointsList } = await chrome.storage.local.get('breakpointsList')
@@ -45,24 +57,39 @@ const loadBreakpointsList = async () => {
       loadBreakpointsList()
     })
 
-    rowElement.appendChild(nameText)
-    rowElement.appendChild(ruleText)
+    contentWrapper.appendChild(nameText)
+    contentWrapper.appendChild(ruleText)
+    rowElement.appendChild(contentWrapper)
     rowElement.appendChild(deleteButton)
 
     breakpointsDiv.appendChild(rowElement)
   }
 
   const inputRowElement = document.createElement('div')
-  inputRowElement.className = 'flex space-x-2 border-b border-gray-200'
+  inputRowElement.className = 'flex items-center justify-between py-2'
+
+  const inputWrapper = document.createElement('div')
+  inputWrapper.className = 'flex items-center gap-8 flex-1'
 
   const keyInput = document.createElement('input')
   const breakpointInput = document.createElement('input')
 
-  keyInput.placeholder = 'Breakpoint key'
-  breakpointInput.placeholder = 'Breakpoint value'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-16'
+  keyInput.className = inputClass
+  breakpointInput.className = inputClass
 
-  const addButton = document.createElement('div')
-  addButton.textContent = '➕'
+  keyInput.placeholder = 'Key'
+  breakpointInput.placeholder = 'Value'
+
+  const addButton = document.createElement('button')
+  addButton.className = 'hover:opacity-80 ml-4'
+
+  const addIcon = document.createElement('img')
+  addIcon.src = '../../assets/plus.svg'
+  addIcon.alt = 'Add'
+  addIcon.className = 'w-4 h-4'
+
+  addButton.appendChild(addIcon)
 
   addButton.addEventListener('click', async () => {
     if (keyInput.value.length === 0 || breakpointInput.value.length === 0) return
@@ -78,8 +105,9 @@ const loadBreakpointsList = async () => {
     loadBreakpointsList()
   })
 
-  inputRowElement.appendChild(keyInput)
-  inputRowElement.appendChild(breakpointInput)
+  inputWrapper.appendChild(keyInput)
+  inputWrapper.appendChild(breakpointInput)
+  inputRowElement.appendChild(inputWrapper)
   inputRowElement.appendChild(addButton)
 
   breakpointsDiv.appendChild(inputRowElement)
