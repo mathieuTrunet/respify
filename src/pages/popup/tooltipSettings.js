@@ -76,7 +76,7 @@ const loadBreakpointsList = async () => {
   const keyInput = document.createElement('input')
   const breakpointInput = document.createElement('input')
 
-  const inputClass = 'border rounded px-2 py-1 text-sm w-24'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-24 focus:outline-[#1DAAAA]'
   keyInput.className = inputClass
   breakpointInput.className = inputClass
 

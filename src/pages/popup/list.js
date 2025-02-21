@@ -102,7 +102,7 @@ const createInputRowElement = storageKey => {
   const nameInput = document.createElement('input')
   const ruleInput = document.createElement('input')
 
-  const inputClass = 'border rounded px-2 py-1 text-sm w-24'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-24 focus:outline-[#1DAAAA]'
   nameInput.className = inputClass
   ruleInput.className = inputClass
 
