@@ -265,3 +265,11 @@ chrome.runtime.onMessage.addListener(async ({ event, value: whitelistEnabled }) 
 
   if (isTooltipDisplayed === false) displayTooltip()
 })
+
+chrome.runtime.onMessage.addListener(async ({ event }, _, sendResponse) => {
+  if (event !== 'getCurrentSite') return
+
+  const currentSite = window.location.hostname
+
+  sendResponse(currentSite)
+})

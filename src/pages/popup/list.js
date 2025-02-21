@@ -15,6 +15,13 @@ const sendListChangedEvent = () =>
     chrome.tabs.sendMessage(currentTab.id, { event: 'listChanged' })
   )
 
+const sendGetCurrentSiteEvent = async () =>
+  new Promise(resolve =>
+    chrome.tabs.query({ active: true, currentWindow: true }, ([currentTab]) =>
+      chrome.tabs.sendMessage(currentTab.id, { event: 'getCurrentSite' }, resolve)
+    )
+  )
+
 const getListContentLoader =
   ({ listDivId, storageKey }) =>
   async () => {
@@ -97,20 +104,23 @@ const createInputRowElement = storageKey => {
   inputRowElement.className = 'flex items-center justify-between py-2'
 
   const inputWrapper = document.createElement('div')
-  inputWrapper.className = 'flex items-center gap-8 flex-1'
+  inputWrapper.className = 'flex items-center gap-4 flex-1'
 
   const nameInput = document.createElement('input')
   const ruleInput = document.createElement('input')
 
-  const inputClass = 'border rounded px-2 py-1 text-sm w-24 focus:outline-[#1DAAAA]'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-20 focus:outline-[#1DAAAA]'
   nameInput.className = inputClass
   ruleInput.className = inputClass
 
   nameInput.placeholder = 'Name'
   ruleInput.placeholder = 'Rule'
 
+  const buttonWrapper = document.createElement('div')
+  buttonWrapper.className = 'flex items-center gap-2'
+
   const addButton = document.createElement('button')
-  addButton.className = 'hover:opacity-80 ml-4'
+  addButton.className = 'hover:opacity-80'
 
   const addIcon = document.createElement('img')
   addIcon.src = '../../assets/plus.svg'
@@ -135,10 +145,38 @@ const createInputRowElement = storageKey => {
     getListContentLoader({ listDivId, storageKey })()
   })
 
+  const addCurrentButton = document.createElement('button')
+  addCurrentButton.className = 'hover:opacity-80'
+
+  const addCurrentIcon = document.createElement('img')
+  addCurrentIcon.src = '../../assets/map-pin-plus.svg'
+  addCurrentIcon.alt = 'Add Current Site'
+  addCurrentIcon.className = 'w-4 h-4'
+
+  addCurrentButton.appendChild(addCurrentIcon)
+
+  addCurrentButton.addEventListener('click', async () => {
+    const currentSite = await sendGetCurrentSiteEvent()
+    const currentSiteName = currentSite.split('.').slice(0, -1).join('.') || currentSite
+    const { [storageKey]: storageList } = await chrome.storage.local.get(storageKey)
+
+    chrome.storage.local.set({ [storageKey]: [...storageList, { key: currentSiteName, value: currentSite }] })
+    sendListChangedEvent()
+
+    const listDiv = inputRowElement.parentElement
+    const listDivId = listDiv.id
+
+    listDiv.innerHTML = ''
+
+    getListContentLoader({ listDivId, storageKey })()
+  })
+
   inputWrapper.appendChild(nameInput)
   inputWrapper.appendChild(ruleInput)
+  buttonWrapper.appendChild(addButton)
+  buttonWrapper.appendChild(addCurrentButton)
   inputRowElement.appendChild(inputWrapper)
-  inputRowElement.appendChild(addButton)
+  inputRowElement.appendChild(buttonWrapper)
 
   return inputRowElement
 }
