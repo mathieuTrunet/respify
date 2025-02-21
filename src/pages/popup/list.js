@@ -1,7 +1,13 @@
+const DEFAULT_DEV_URLS = [
+  { key: 'localhost:*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
+  { key: '127.*.*.*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
+]
+
 document.addEventListener('DOMContentLoaded', () => {
   loadWhitelistContent()
   loadBlacklistContent()
   loadDevSitesListContent()
+  addDefaultDevSitesListContent()
 })
 
 const sendListChangedEvent = () =>
@@ -35,11 +41,13 @@ const createRowElement = (storageKey, entry) => {
 
   const nameText = document.createElement('span')
   nameText.textContent = name
-  nameText.className = 'font-medium w-16'
+  nameText.className = 'font-medium w-24 truncate'
+  nameText.title = name
 
   const ruleText = document.createElement('span')
   ruleText.textContent = rule
-  ruleText.className = 'text-gray-600 w-16 text-right'
+  ruleText.className = 'text-gray-600 w-24 truncate text-right'
+  ruleText.title = rule
 
   const deleteButton = createDeleteButtonElement(storageKey, index)
   deleteButton.className = 'hover:opacity-80 ml-4'
@@ -92,7 +100,7 @@ const createInputRowElement = storageKey => {
   const nameInput = document.createElement('input')
   const ruleInput = document.createElement('input')
 
-  const inputClass = 'border rounded px-2 py-1 text-sm w-16'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-24'
   nameInput.className = inputClass
   ruleInput.className = inputClass
 
@@ -136,3 +144,16 @@ const createInputRowElement = storageKey => {
 const loadWhitelistContent = getListContentLoader('whitelist-div', 'whitelist')
 const loadBlacklistContent = getListContentLoader('blacklist-div', 'blacklist')
 const loadDevSitesListContent = getListContentLoader('dev-url-div', 'devSitesList')
+
+const addDefaultDevSitesListContent = () => {
+  document.getElementById('add-default-dev-url').addEventListener('click', async () => {
+    const { devSitesList } = await chrome.storage.local.get('devSitesList')
+
+    chrome.storage.local.set({ devSitesList: [...DEFAULT_DEV_URLS, ...devSitesList] })
+    sendListChangedEvent()
+
+    const listDiv = document.getElementById('dev-url-div')
+    listDiv.innerHTML = ''
+    loadDevSitesListContent()
+  })
+}

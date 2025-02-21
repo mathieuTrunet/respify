@@ -27,11 +27,13 @@ const loadBreakpointsList = async () => {
 
     const nameText = document.createElement('span')
     nameText.textContent = breakpointKey
-    nameText.className = 'font-medium w-16'
+    nameText.className = 'font-medium w-24 truncate'
+    nameText.title = breakpointKey
 
     const ruleText = document.createElement('span')
     ruleText.textContent = breakpointValue
-    ruleText.className = 'text-gray-600 w-16 text-right'
+    ruleText.className = 'text-gray-600 w-24 truncate text-right'
+    ruleText.title = breakpointValue
 
     const deleteButton = document.createElement('button')
     deleteButton.className = 'hover:opacity-80 ml-4'
@@ -74,7 +76,7 @@ const loadBreakpointsList = async () => {
   const keyInput = document.createElement('input')
   const breakpointInput = document.createElement('input')
 
-  const inputClass = 'border rounded px-2 py-1 text-sm w-16'
+  const inputClass = 'border rounded px-2 py-1 text-sm w-24'
   keyInput.className = inputClass
   breakpointInput.className = inputClass
 
