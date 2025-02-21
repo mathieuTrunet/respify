@@ -145,7 +145,7 @@ chrome.runtime.onMessage.addListener(async ({ event, value: tailwindOnly }) => {
     return
   }
 
-  if (blacklistEnabled && isSiteBlacklisted()) {
+  if (blacklistEnabled && (await isSiteBlacklisted())) {
     if (isTooltipDisplayed) hideTooltip()
     return
   }
@@ -170,7 +170,7 @@ chrome.runtime.onMessage.addListener(async ({ event, value: devOnly }) => {
     return
   }
 
-  if (blacklistEnabled && isSiteBlacklisted()) {
+  if (blacklistEnabled && (await isSiteBlacklisted())) {
     if (isTooltipDisplayed) hideTooltip()
     return
   }
@@ -183,7 +183,7 @@ chrome.runtime.onMessage.addListener(async ({ event, value: blacklistEnabled }) 
 
   const isTooltipDisplayed = getTooltipDisplayState()
 
-  if (blacklistEnabled && isSiteBlacklisted()) {
+  if (blacklistEnabled && (await isSiteBlacklisted())) {
     if (isTooltipDisplayed) hideTooltip()
     return
   }
@@ -224,7 +224,7 @@ chrome.runtime.onMessage.addListener(async ({ event }) => {
     return
   }
 
-  if (blacklistEnabled && isSiteBlacklisted()) {
+  if (blacklistEnabled && (await isSiteBlacklisted())) {
     if (isTooltipDisplayed) hideTooltip()
     return
   }
