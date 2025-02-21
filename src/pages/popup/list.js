@@ -1,6 +1,5 @@
 const DEFAULT_DEV_URLS = [
-  { key: 'localhost:*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
-  { key: '127.*.*.*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
+  { key: 'localhost:* & 127.*.*.*', value: '/(localhost(:d{1,5})?|127.(d{1,3}).(d{1,3}).(d{1,3}))/' },
 ]
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -188,6 +187,8 @@ const loadDevSitesListContent = getListContentLoader({ listDivId: 'dev-url-div',
 const addDefaultDevSitesListContent = () => {
   document.getElementById('add-default-dev-url').addEventListener('click', async () => {
     const { devSitesList } = await chrome.storage.local.get('devSitesList')
+
+    if (devSitesList.some(item => DEFAULT_DEV_URLS.some(defaultItem => defaultItem.key === item.key))) return
 
     chrome.storage.local.set({ devSitesList: [...DEFAULT_DEV_URLS, ...devSitesList] })
     sendListChangedEvent()
