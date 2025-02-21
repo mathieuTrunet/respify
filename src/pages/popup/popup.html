@@ -91,7 +91,24 @@
 
     <div id="list-div" class="hidden w-80 p-4 space-y-4">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-lg">Manage Lists</h2>
+            <div class="flex items-center gap-2">
+                <h2 class="font-semibold text-lg">Manage Lists</h2>
+                <div class="relative group">
+                    <img src="../../assets/circle-help.svg" alt="Help" class="w-4 h-4 cursor-help">
+                    <div
+                        class="absolute hidden group-hover:block left-[-100px] top-6 w-64 p-2 bg-gray-800 text-white text-sm rounded shadow-lg z-10">
+                        <p><b class="text-[#1DAAAA]">Name:</b> Simple name to differentiate your rules</p>
+                        <p><b class="text-[#1DAAAA]">Rule:</b> The rule that determine if the tooltip should be shown
+                        </p>
+                        <p>This rule can either be a <b class="text-[#1DAAAA]">URL pattern</b> or a <b
+                                class="text-[#1DAAAA]">regular expression</b></p>
+                        <p>Regular expression should be formatted like this : <b class="text-[#1DAAAA]">/<i>your
+                                    regex</i>/</b></p>
+                        <p>You can take for example the default regex for <b class="text-[#1DAAAA]">development
+                                URLs</b></p>
+                    </div>
+                </div>
+            </div>
             <button id="close-list" class="text-gray-600 hover:text-gray-800">
                 <img src="../../assets/corner-down-left.svg" alt="Close" class="w-5 h-5">
             </button>
@@ -151,6 +168,16 @@
                 <div class="flex items-center gap-1.5">
                     <img src="../../assets/proportions.svg" alt="Breakpoints" class="w-4 h-4">
                     <span class="font-medium">Breakpoints</span>
+                    <div class="relative group">
+                        <img src="../../assets/circle-help.svg" alt="Help" class="w-4 h-4 cursor-help">
+                        <div
+                            class="absolute hidden group-hover:block left-[-100px] top-6 w-64 p-2 bg-gray-800 text-white text-sm rounded shadow-lg z-10">
+                            <p><b class="text-[#1DAAAA]">Name:</b> The breakpoint name (sm, md, lg, etc)</p>
+                            <p><b class="text-[#1DAAAA]">Value:</b> The minimum width in pixels for this breakpoint</p>
+                            <p>These breakpoints determine when responsive classes like <b
+                                    class="text-[#1DAAAA]">sm:</b> or <b class="text-[#1DAAAA]">md:</b> take effect</p>
+                        </div>
+                    </div>
                 </div>
                 <button id="restore-default-breakpoints" class="text-[#1DAAAA] hover:underline">
                     Restore defaults
