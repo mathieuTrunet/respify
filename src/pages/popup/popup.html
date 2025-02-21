@@ -207,6 +207,14 @@
     ::-webkit-scrollbar-thumb:hover {
         background-color: #71717a;
     }
+
+    button:disabled {
+        pointer-events: none;
+    }
+
+    input:disabled+button {
+        pointer-events: none;
+    }
 </style>
 
 </html>

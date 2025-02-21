@@ -36,36 +36,67 @@ const setExtensionEnableCheckboxEvent = () => {
   })
 }
 
-const getCheckboxEventSetter = (checkboxId, storageKey, eventMessageKey) => () => {
-  const checkbox = document.getElementById(checkboxId)
+const getCheckboxEventSetter =
+  ({ checkboxId, storageKey, eventMessageKey, overload }) =>
+  () => {
+    const checkbox = document.getElementById(checkboxId)
 
-  chrome.storage.local.get(storageKey, ({ [storageKey]: storageValue }) => (checkbox.checked = storageValue))
+    chrome.storage.local.get(storageKey, ({ [storageKey]: storageValue }) => {
+      checkbox.checked = storageValue
+      if (overload) overload(storageValue)
+    })
 
-  checkbox.addEventListener('change', () => {
-    const checkBoxIsChecked = checkbox.checked
+    checkbox.addEventListener('change', () => {
+      const checkBoxIsChecked = checkbox.checked
 
-    chrome.storage.local.set({ [storageKey]: checkBoxIsChecked })
+      chrome.storage.local.set({ [storageKey]: checkBoxIsChecked })
 
-    sendEvent({ event: eventMessageKey, value: checkBoxIsChecked })
-  })
+      sendEvent({ event: eventMessageKey, value: checkBoxIsChecked })
+
+      if (overload) overload(checkBoxIsChecked)
+    })
+  }
+
+const toggleOtherCheckboxes = value => {
+  const devOnlyCheckbox = document.getElementById('dev-only-checkbox')
+  const tailwindOnlyCheckbox = document.getElementById('tailwind-only-checkbox')
+  const blacklistCheckbox = document.getElementById('blacklist-checkbox')
+
+  devOnlyCheckbox.disabled = value
+  tailwindOnlyCheckbox.disabled = value
+  blacklistCheckbox.disabled = value
+
+  const manageBlacklistButton = document.getElementById('manage-blacklist')
+  const manageDevUrlButton = document.getElementById('manage-dev-url-list')
+
+  manageBlacklistButton.disabled = value
+  manageDevUrlButton.disabled = value
+
+  manageBlacklistButton.style.opacity = value ? 0.5 : 1
+  manageDevUrlButton.style.opacity = value ? 0.5 : 1
 }
 
-const setDevOnlyCheckboxEvent = getCheckboxEventSetter('dev-only-checkbox', 'devOnly', 'devOnlyChanged')
-const setTailwindOnlyCheckboxEvent = getCheckboxEventSetter(
-  'tailwind-only-checkbox',
-  'tailwindOnly',
-  'tailwindOnlyChanged'
-)
-const setWhitelistCheckboxEvent = getCheckboxEventSetter(
-  'whitelist-checkbox',
-  'whitelistEnabled',
-  'whitelistChanged'
-)
-const setBlacklistCheckboxEvent = getCheckboxEventSetter(
-  'blacklist-checkbox',
-  'blacklistEnabled',
-  'blacklistChanged'
-)
+const setWhitelistCheckboxEvent = getCheckboxEventSetter({
+  checkboxId: 'whitelist-checkbox',
+  storageKey: 'whitelistEnabled',
+  eventMessageKey: 'whitelistChanged',
+  overload: value => toggleOtherCheckboxes(value),
+})
+const setBlacklistCheckboxEvent = getCheckboxEventSetter({
+  checkboxId: 'blacklist-checkbox',
+  storageKey: 'blacklistEnabled',
+  eventMessageKey: 'blacklistChanged',
+})
+const setDevOnlyCheckboxEvent = getCheckboxEventSetter({
+  checkboxId: 'dev-only-checkbox',
+  storageKey: 'devOnly',
+  eventMessageKey: 'devOnlyChanged',
+})
+const setTailwindOnlyCheckboxEvent = getCheckboxEventSetter({
+  checkboxId: 'tailwind-only-checkbox',
+  storageKey: 'tailwindOnly',
+  eventMessageKey: 'tailwindOnlyChanged',
+})
 
 const setResetTooltipPositionEvent = () => {
   const resetTooltipPosition = document.getElementById('reset-tooltip-position')
