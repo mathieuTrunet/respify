@@ -273,3 +273,11 @@ chrome.runtime.onMessage.addListener(async ({ event }, _, sendResponse) => {
 
   sendResponse(currentSite)
 })
+
+chrome.runtime.onMessage.addListener(async ({ event }) => {
+  if (event !== 'tabChanged') return
+
+  document.getElementById('respify-tooltip').style.display = 'none'
+
+  loadOrNotTooltip()
+})
