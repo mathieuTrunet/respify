@@ -9,7 +9,6 @@
     <script src="./list.js"></script>
     <script src="./tooltipSettings.js"></script>
     <script src="./router.js"></script>
-    <link href="../../assets/NotoSansKR-Regular.ttf" rel="stylesheet">
 
 
     <title>Respify</title>
@@ -68,7 +67,7 @@
                         <img src="../../assets/globe-lock.svg" alt="Development" class="w-4 h-4">
                         <span class="font-medium">Development only</span>
                     </div>
-                    <div class="flex items-center gap-1.5">
+                    <div class="flex items-center gap-[9px]">
                         <input id="dev-only-checkbox" type="checkbox" class="w-4 h-4 accent-[#1DAAAA]" />
                         <button id="manage-dev-url-list" class="text-[#1DAAAA] hover:underline">
                             Manage URLs
@@ -197,6 +196,11 @@
 </body>
 
 <style>
+    @font-face {
+        font-family: 'NotoSansKR';
+        src: url('../../assets/NotoSansKR-Regular.ttf') format('truetype');
+    }
+
     body {
         font-family: 'NotoSansKR', sans-serif;
     }
