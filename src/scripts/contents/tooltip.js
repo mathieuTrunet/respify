@@ -4,10 +4,10 @@ let tooltipSize = 100 // Default size (100%)
 let tooltipOpacity = 100 // Default opacity (100%)
 
 const getBreakpointValue = async () => {
-  const { breakpoints } = await chrome.storage.local.get('breakpoints')
+  const { breakpointsList } = await chrome.storage.local.get('breakpointsList')
   const screenWidth = window.screen.width
 
-  const sortedBreakpoints = [...breakpoints].sort((a, b) => a.value - b.value).reverse()
+  const sortedBreakpoints = [...breakpointsList].sort((a, b) => a.value - b.value).reverse()
   const breakpoint = sortedBreakpoints.find(breakpoint => screenWidth >= breakpoint.value)
 
   return breakpoint?.key || 'xs'
