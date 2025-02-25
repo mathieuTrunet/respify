@@ -1,6 +1,7 @@
 let translateX = 0
 let translateY = 0
 let tooltipSize = 100 // Default size (100%)
+let tooltipOpacity = 100 // Default opacity (100%)
 
 const getBreakpointValue = async () => {
   const { breakpoints } = await chrome.storage.local.get('breakpoints')
@@ -47,7 +48,9 @@ document.body.appendChild(tooltipContainer)
     #tooltip-main-div {
       --zoom-scale: 1;
       --tooltip-size: 1;
+      --tooltip-opacity: 1;
       transform-origin: bottom left;
+      opacity: var(--tooltip-opacity);
     }
   ` + css
   shadow.appendChild(style)
@@ -67,15 +70,27 @@ document.body.appendChild(tooltipContainer)
   const updateTooltipTransform = () => {
     tooltip.style.transform = `scale(var(--zoom-scale, 1)) scale(var(--tooltip-size, 1)) translate(${translateX}px, ${translateY}px)`
   }
+
   // Function to update tooltip size
   const updateTooltipSize = () => {
     tooltip.style.setProperty('--tooltip-size', `${tooltipSize / 100}`)
     updateTooltipTransform()
   }
+
+  // Function to update tooltip opacity
+  const updateTooltipOpacity = () => {
+    tooltip.style.setProperty('--tooltip-opacity', `${tooltipOpacity / 100}`)
+  }
+
   // Load initial tooltip size from storage
   const { tooltipSize: storedSize = 100 } = await chrome.storage.local.get('tooltipSize')
   tooltipSize = storedSize
   updateTooltipSize()
+
+  // Load initial tooltip opacity from storage
+  const { tooltipOpacity: storedOpacity = 100 } = await chrome.storage.local.get('tooltipOpacity')
+  tooltipOpacity = storedOpacity
+  updateTooltipOpacity()
 
   const updateZoomNormalization = () => {
     const zoomLevel = window.devicePixelRatio || 1
@@ -125,11 +140,17 @@ document.body.appendChild(tooltipContainer)
   resolutionObserver.observe(document.documentElement)
 
   // Combined message listener for all events
-  chrome.runtime.onMessage.addListener(({ event, size }) => {
+  chrome.runtime.onMessage.addListener(({ event, size, opacity }) => {
     // Handle tooltip size changes
     if (event === 'tooltipSizeChanged' && size) {
       tooltipSize = size
       updateTooltipSize()
+    }
+
+    // Handle tooltip opacity changes
+    if (event === 'tooltipOpacityChanged' && opacity !== undefined) {
+      tooltipOpacity = opacity
+      updateTooltipOpacity()
     }
 
     // Handle reset tooltip position

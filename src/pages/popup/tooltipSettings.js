@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize tooltip size controls
   initTooltipSizeControls()
   restoreDefaultTooltipSize()
+
+  // Initialize tooltip opacity controls
+  initTooltipOpacityControls()
+  restoreDefaultTooltipOpacity()
 })
 
 const DEFAULT_BREAKPOINTS = [
@@ -18,6 +22,9 @@ const DEFAULT_BREAKPOINTS = [
 
 // Default tooltip size (100%)
 const DEFAULT_TOOLTIP_SIZE = 100
+
+// Default tooltip opacity (100%)
+const DEFAULT_TOOLTIP_OPACITY = 100
 
 const loadBreakpointsList = async () => {
   const breakpointsDiv = document.getElementById('breakpoints-div')
@@ -179,6 +186,56 @@ const restoreDefaultTooltipSize = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       if (tabs[0]) {
         chrome.tabs.sendMessage(tabs[0].id, { event: 'tooltipSizeChanged', size: DEFAULT_TOOLTIP_SIZE })
+      }
+    })
+  })
+}
+
+// Initialize tooltip opacity controls
+const initTooltipOpacityControls = async () => {
+  const opacitySlider = document.getElementById('tooltip-opacity-slider')
+  const opacityValueDisplay = document.getElementById('tooltip-opacity-value')
+
+  // Get stored opacity or use default
+  const { tooltipOpacity = DEFAULT_TOOLTIP_OPACITY } = await chrome.storage.local.get('tooltipOpacity')
+
+  // Set initial slider value
+  opacitySlider.value = tooltipOpacity
+  opacityValueDisplay.textContent = `${tooltipOpacity}%`
+
+  // Update opacity when slider changes
+  opacitySlider.addEventListener('input', () => {
+    const newOpacity = parseInt(opacitySlider.value)
+    opacityValueDisplay.textContent = `${newOpacity}%`
+
+    // Store the new opacity
+    chrome.storage.local.set({ tooltipOpacity: newOpacity })
+
+    // Notify content script about the opacity change
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { event: 'tooltipOpacityChanged', opacity: newOpacity })
+      }
+    })
+  })
+}
+
+// Restore default tooltip opacity
+const restoreDefaultTooltipOpacity = () => {
+  document.getElementById('restore-default-tooltip-opacity').addEventListener('click', () => {
+    // Reset to default opacity
+    chrome.storage.local.set({ tooltipOpacity: DEFAULT_TOOLTIP_OPACITY })
+
+    // Update UI
+    const opacitySlider = document.getElementById('tooltip-opacity-slider')
+    const opacityValueDisplay = document.getElementById('tooltip-opacity-value')
+    opacitySlider.value = DEFAULT_TOOLTIP_OPACITY
+    opacityValueDisplay.textContent = `${DEFAULT_TOOLTIP_OPACITY}%`
+
+    // Notify content script
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { event: 'tooltipOpacityChanged', opacity: DEFAULT_TOOLTIP_OPACITY })
       }
     })
   })
