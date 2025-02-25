@@ -1,5 +1,6 @@
 let translateX = 0
 let translateY = 0
+let tooltipSize = 100 // Default size (100%)
 
 const getBreakpointValue = async () => {
   const { breakpoints } = await chrome.storage.local.get('breakpoints')
@@ -45,6 +46,7 @@ document.body.appendChild(tooltipContainer)
     }
     #tooltip-main-div {
       --zoom-scale: 1;
+      --tooltip-size: 1;
       transform-origin: bottom left;
     }
   ` + css
@@ -62,15 +64,24 @@ document.body.appendChild(tooltipContainer)
 
   const tooltip = shadow.querySelector('#tooltip-main-div')
 
+  const updateTooltipTransform = () => {
+    tooltip.style.transform = `scale(var(--zoom-scale, 1)) scale(var(--tooltip-size, 1)) translate(${translateX}px, ${translateY}px)`
+  }
+  // Function to update tooltip size
+  const updateTooltipSize = () => {
+    tooltip.style.setProperty('--tooltip-size', `${tooltipSize / 100}`)
+    updateTooltipTransform()
+  }
+  // Load initial tooltip size from storage
+  const { tooltipSize: storedSize = 100 } = await chrome.storage.local.get('tooltipSize')
+  tooltipSize = storedSize
+  updateTooltipSize()
+
   const updateZoomNormalization = () => {
     const zoomLevel = window.devicePixelRatio || 1
     tooltip.style.setProperty('--zoom-scale', `${1 / zoomLevel}`)
     tooltip.style.transformOrigin = 'bottom left'
     updateTooltipTransform()
-  }
-
-  const updateTooltipTransform = () => {
-    tooltip.style.transform = `scale(var(--zoom-scale, 1)) translate(${translateX}px, ${translateY}px)`
   }
 
   updateZoomNormalization()
@@ -113,12 +124,20 @@ document.body.appendChild(tooltipContainer)
   resizeObserver.observe(document.documentElement)
   resolutionObserver.observe(document.documentElement)
 
-  chrome.runtime.onMessage.addListener(({ event }) => {
-    if (event !== 'resetTooltipPosition') return
+  // Combined message listener for all events
+  chrome.runtime.onMessage.addListener(({ event, size }) => {
+    // Handle tooltip size changes
+    if (event === 'tooltipSizeChanged' && size) {
+      tooltipSize = size
+      updateTooltipSize()
+    }
 
-    translateX = 0
-    translateY = 0
-    updateTooltipTransform()
+    // Handle reset tooltip position
+    if (event === 'resetTooltipPosition') {
+      translateX = 0
+      translateY = 0
+      updateTooltipTransform()
+    }
   })
 
   tooltip

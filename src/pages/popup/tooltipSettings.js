@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
   loadBreakpointsList()
 
   restoreDefaultBreakpoints()
+
+  // Initialize tooltip size controls
+  initTooltipSizeControls()
+  restoreDefaultTooltipSize()
 })
 
 const DEFAULT_BREAKPOINTS = [
@@ -11,6 +15,9 @@ const DEFAULT_BREAKPOINTS = [
   { key: 'xl', value: 1280 },
   { key: '2xl', value: 1536 },
 ]
+
+// Default tooltip size (100%)
+const DEFAULT_TOOLTIP_SIZE = 100
 
 const loadBreakpointsList = async () => {
   const breakpointsDiv = document.getElementById('breakpoints-div')
@@ -124,5 +131,55 @@ const restoreDefaultBreakpoints = () => {
     breakpointsDiv.innerHTML = ''
 
     loadBreakpointsList()
+  })
+}
+
+// Initialize tooltip size controls
+const initTooltipSizeControls = async () => {
+  const sizeSlider = document.getElementById('tooltip-size-slider')
+  const sizeValueDisplay = document.getElementById('tooltip-size-value')
+
+  // Get stored size or use default
+  const { tooltipSize = DEFAULT_TOOLTIP_SIZE } = await chrome.storage.local.get('tooltipSize')
+
+  // Set initial slider value
+  sizeSlider.value = tooltipSize
+  sizeValueDisplay.textContent = `${tooltipSize}%`
+
+  // Update size when slider changes
+  sizeSlider.addEventListener('input', () => {
+    const newSize = parseInt(sizeSlider.value)
+    sizeValueDisplay.textContent = `${newSize}%`
+
+    // Store the new size
+    chrome.storage.local.set({ tooltipSize: newSize })
+
+    // Notify content script about the size change
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { event: 'tooltipSizeChanged', size: newSize })
+      }
+    })
+  })
+}
+
+// Restore default tooltip size
+const restoreDefaultTooltipSize = () => {
+  document.getElementById('restore-default-tooltip-size').addEventListener('click', () => {
+    // Reset to default size
+    chrome.storage.local.set({ tooltipSize: DEFAULT_TOOLTIP_SIZE })
+
+    // Update UI
+    const sizeSlider = document.getElementById('tooltip-size-slider')
+    const sizeValueDisplay = document.getElementById('tooltip-size-value')
+    sizeSlider.value = DEFAULT_TOOLTIP_SIZE
+    sizeValueDisplay.textContent = `${DEFAULT_TOOLTIP_SIZE}%`
+
+    // Notify content script
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { event: 'tooltipSizeChanged', size: DEFAULT_TOOLTIP_SIZE })
+      }
+    })
   })
 }

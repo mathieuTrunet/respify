@@ -192,6 +192,38 @@
                 <div class="p-3" id="breakpoints-div"></div>
             </div>
         </div>
+
+        <div>
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-1.5">
+                    <img src="../../assets/maximize.svg" alt="Size" class="w-4 h-4">
+                    <span class="font-medium">Tooltip Size</span>
+                    <div class="relative group">
+                        <img src="../../assets/circle-help.svg" alt="Help" class="w-4 h-4 cursor-help">
+                        <div
+                            class="absolute hidden group-hover:block left-[-100px] top-6 w-64 p-2 bg-gray-800 text-white text-sm rounded shadow-lg z-10">
+                            <p>Adjust the size of the tooltip using the slider below.</p>
+                            <p>Default size is 100%.</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="restore-default-tooltip-size" class="text-[#1DAAAA] hover:underline">
+                    Reset to default
+                </button>
+            </div>
+            <div class="bg-white rounded shadow">
+                <div class="h-1 bg-[#4C92FC] rounded-t"></div>
+                <div class="p-3">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Size: <span id="tooltip-size-value">100%</span></span>
+                        </div>
+                        <input type="range" id="tooltip-size-slider" min="50" max="200" value="100" step="10"
+                            class="w-full accent-[#1DAAAA]">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

@@ -19,5 +19,6 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       { key: 'xl', value: 1280 },
       { key: '2xl', value: 1536 },
     ],
+    tooltipSize: 100,
   })
 })
