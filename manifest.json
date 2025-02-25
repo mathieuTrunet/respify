@@ -30,5 +30,17 @@
                 "<all_urls>"
             ]
         }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "src/assets/*",
+                "src/templates/*",
+                "src/assets/NotoSansKR-Regular.ttf"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
     ]
 }

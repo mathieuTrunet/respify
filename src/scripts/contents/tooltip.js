@@ -1,15 +1,6 @@
 let translateX = 0
 let translateY = 0
 
-chrome.runtime.onMessage.addListener(({ event }) => {
-  if (event !== 'resetTooltipPosition') return
-
-  const zoom = window.devicePixelRatio
-  tooltipElement.style.transform = `translate(0px, 0px) scale(${1 / zoom})`
-  translateX = 0
-  translateY = 0
-})
-
 const getBreakpointValue = async () => {
   const { breakpoints } = await chrome.storage.local.get('breakpoints')
   const screenWidth = window.screen.width
@@ -20,35 +11,74 @@ const getBreakpointValue = async () => {
   return breakpoint?.key || 'xs'
 }
 
-const createTooltipElement = () => {
-  const tooltip = document.createElement('div')
+const createTooltipContainer = () => {
+  const container = document.createElement('div')
+  container.id = 'respify-tooltip'
+  container.style.display = 'none'
 
-  tooltip.id = 'respify-tooltip'
-  tooltip.style.zIndex = 9999
-  tooltip.style.position = 'fixed'
-  tooltip.style.cursor = 'move'
+  container.attachShadow({ mode: 'open' })
 
-  tooltip.style.bottom = '0'
-  tooltip.style.right = '0'
+  return container
+}
 
-  tooltip.style.display = 'none'
-  tooltip.style.paddingTop = '0.125rem'
-  tooltip.style.paddingBottom = '0.125rem'
-  tooltip.style.paddingLeft = '0.625rem'
-  tooltip.style.paddingRight = '0.625rem'
-  tooltip.style.alignItems = 'center'
-  tooltip.style.backgroundColor = '#7579e7'
-  tooltip.style.borderTopLeftRadius = '0.25rem'
-  tooltip.style.borderStroke = '0px'
-  tooltip.style.fontSize = '1.25rem'
-  tooltip.style.lineHeight = '1rem'
-  tooltip.style.fontWeight = 600
-  tooltip.style.color = 'black'
-  tooltip.style.userSelect = 'none'
+const tooltipContainer = createTooltipContainer()
+
+document.body.appendChild(tooltipContainer)
+;(async () => {
+  const shadow = document.getElementById('respify-tooltip').shadowRoot
+  if (!shadow) return
+
+  const style = document.createElement('style')
+  const styleResponse = await fetch(chrome.runtime.getURL('src/templates/tooltip/tooltip.css'))
+  const css = await styleResponse.text()
+
+  style.textContent =
+    `
+    :host {
+      all: initial;
+      display: block;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    #tooltip-main-div {
+      --zoom-scale: 1;
+      transform-origin: bottom left;
+    }
+  ` + css
+  shadow.appendChild(style)
+
+  const content = document.createElement('div')
+  const htmlResponse = await fetch(chrome.runtime.getURL('src/templates/tooltip/tooltip.html'))
+  const html = await htmlResponse.text()
+  content.innerHTML = html
+  shadow.appendChild(content)
 
   let isDragging = false
   let startX
   let startY
+
+  const tooltip = shadow.querySelector('#tooltip-main-div')
+
+  const updateZoomNormalization = () => {
+    const zoomLevel = window.devicePixelRatio || 1
+    tooltip.style.setProperty('--zoom-scale', `${1 / zoomLevel}`)
+    tooltip.style.transformOrigin = 'bottom left'
+    updateTooltipTransform()
+  }
+
+  const updateTooltipTransform = () => {
+    tooltip.style.transform = `scale(var(--zoom-scale, 1)) translate(${translateX}px, ${translateY}px)`
+  }
+
+  updateZoomNormalization()
+
+  window.addEventListener('resize', updateZoomNormalization)
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateZoomNormalization)
+  }
 
   tooltip.addEventListener('mousedown', element => {
     tooltip.style.transition = 'none'
@@ -57,41 +87,41 @@ const createTooltipElement = () => {
     startY = element.clientY - translateY
   })
 
-  const updateZoomCompensation = () => {
-    const zoom = window.devicePixelRatio
-    tooltip.style.transform = `translate(${translateX}px, ${translateY}px) scale(${1 / zoom})`
-  }
-
-  window.matchMedia('(resolution)').addListener(updateZoomCompensation)
-  updateZoomCompensation()
-
   document.addEventListener('mousemove', element => {
     if (isDragging === false) return
 
     element.preventDefault()
     translateX = element.clientX - startX
     translateY = element.clientY - startY
-    const zoom = window.devicePixelRatio
-    tooltip.style.transform = `translate(${translateX}px, ${translateY}px) scale(${1 / zoom})`
+    updateTooltipTransform()
   })
 
   document.addEventListener('mouseup', () => {
     isDragging = false
-
     setTimeout(() => (tooltip.style.transition = 'none'), 500)
   })
 
   const resizeObserver = new ResizeObserver(
-    async () => (tooltip.textContent = `breakpoint: ${await getBreakpointValue()}`)
+    async () => (tooltip.querySelector('#tooltip-breakpoint').textContent = await getBreakpointValue())
+  )
+
+  const resolutionObserver = new ResizeObserver(
+    async () =>
+      (tooltip.querySelector('#tooltip-resolution').textContent = `${window.screen.width}x${window.screen.height}`)
   )
 
   resizeObserver.observe(document.documentElement)
+  resolutionObserver.observe(document.documentElement)
 
-  return tooltip
-}
+  chrome.runtime.onMessage.addListener(({ event }) => {
+    if (event !== 'resetTooltipPosition') return
 
-const tooltipElement = createTooltipElement()
+    translateX = 0
+    translateY = 0
+    updateTooltipTransform()
+  })
 
-document.body.appendChild(tooltipElement)
-
-getBreakpointValue().then(breakpoint => (tooltipElement.textContent = `breakpoint: ${breakpoint}`))
+  tooltip
+    .querySelector('#tooltip-eye-off')
+    .addEventListener('click', () => document.getElementById('respify-tooltip').remove())
+})()

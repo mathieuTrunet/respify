@@ -1,0 +1,67 @@
+#tooltip-main-div {
+  font-family: sans-serif;
+  letter-spacing: -0.07rem;
+  font-size: 16px;
+  font-weight: 100;
+  color: black;
+  z-index: 9999;
+  position: fixed;
+  cursor: move;
+  bottom: 80px;
+  left: 80px;
+  user-select: none;
+  background-color: white;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #1dabaa;
+  border-top: 3px solid #1dabaa;
+  display: flex;
+  align-items: center;
+  padding-left: 3px;
+  padding-right: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  gap: 5px;
+}
+
+#tooltip-main-div p {
+  margin: 0;
+}
+
+#tooltip-divider {
+  color: #1dabaa;
+  font-weight: 900;
+}
+
+#tooltip-breakpoint {
+  text-transform: uppercase;
+}
+
+#tooltip-eye-off {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  padding-top: 2px;
+  padding-right: 2px;
+  margin: 0;
+  transform: scale(0);
+  transform-origin: left;
+  transition: transform 0.1s ease;
+  width: 0;
+  overflow: visible;
+}
+
+#tooltip-main-div:hover #tooltip-eye-off {
+  transform: scale(1);
+  width: 20px;
+  margin-left: 5px;
+}
+
+#tooltip-main-div svg:nth-child(5),
+#tooltip-main-div svg:nth-child(4),
+#tooltip-main-div:hover svg:nth-child(5) {
+  margin: 0;
+  transform: none;
+  width: auto;
+}
