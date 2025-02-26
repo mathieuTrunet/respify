@@ -21,28 +21,24 @@ Respify is a developer tool that shows the current TailwindCSS responsive breakp
 
 ## Installation
 
+The extension can be downloaded directly from the chrome web store page, or locally from the repository, only needing /lib /src and manifest.json.
+
 1. Clone this repository:
 
    ```
    git clone https://github.com/yourusername/respify.git
    ```
 
-2. Install dependencies:
+2. Install dependencies (only needed for linting and chrome API intellisense):
 
    ```
-   npm install
+   bun install
    ```
 
-3. Build the extension:
-
-   ```
-   npm run build
-   ```
-
-4. Load the extension in Chrome:
+3. Load the extension in Chrome:
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode"
-   - Click "Load unpacked" and select the build directory
+   - Click "Load unpacked" and select the root of directory
 
 ## Usage
 
@@ -56,7 +52,7 @@ Respify is a developer tool that shows the current TailwindCSS responsive breakp
 
 The following diagram illustrates how Respify works:
 
-![Respify Architecture Diagram](architecture-diagram.png)
+![Respify Architecture Diagram](diagram.png)
 
 The extension consists of:
 
@@ -89,7 +85,7 @@ These can be customized in the extension settings.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome. Feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -103,6 +99,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Built with TypeScript and modern JavaScript
+- Built with vanilla JavaScript, ESNext features, chrome extension API
 - Inspired by the needs of TailwindCSS developers
-- Icon designed by [Designer Name]
+- Icons from [Lucide](https://lucide.dev/), extension icons made with Canvas
