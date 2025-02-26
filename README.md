@@ -26,7 +26,7 @@ The extension can be downloaded directly from the chrome web store page, or loca
 1. Clone this repository:
 
    ```
-   git clone https://github.com/yourusername/respify.git
+   git clone https://github.com/mathieuTrunet/respify.git
    ```
 
 2. Install dependencies (only needed for linting and chrome API intellisense):
@@ -102,3 +102,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Built with vanilla JavaScript, ESNext features, chrome extension API
 - Inspired by the needs of TailwindCSS developers
 - Icons from [Lucide](https://lucide.dev/), extension icons made with Canvas
+- Diagram made with [Eraser.io](https://www.eraser.io/)
