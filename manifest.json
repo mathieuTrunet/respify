@@ -19,10 +19,8 @@
         "128": "src/assets/icons/icon128.png"
     },
     "permissions": [
-        "tabs",
         "activeTab",
-        "storage",
-        "scripting"
+        "storage"
     ],
     "host_permissions": [
         "http://*/*",
